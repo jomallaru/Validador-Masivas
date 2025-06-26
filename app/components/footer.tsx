@@ -35,11 +35,22 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-gray-200 mt-8 pt-6 text-center">
-          <p className="text-sm text-gray-500">
-            © 2024 Validador de Documentos Excel. Sistema de validación especializado.
-          </p>
+          <ul className="text-sm text-gray-500 list-none">
+            <li>© 2024 Validador de Documentos Excel. Sistema de validación especializado.</li>
+            <li>
+              Elaborado por{" "}
+              <a
+                href="https://github.com/jomallaru"
+                className="text-blue-600 hover:underline"
+              >
+                Jonathan Llanos
+              </a>.
+            </li>
+          </ul>
         </div>
-      </div>
-    </footer>
+
+     
+    </div>
+    </footer >
   )
 }
