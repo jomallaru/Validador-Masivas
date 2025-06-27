@@ -10,6 +10,13 @@ const getFieldValue = (row: any, fieldName: string): string => {
   return stringValue
 }
 
+// Función para validar que solo contenga letras, espacios y puntos
+const isValidNameFormat = (name: string): boolean => {
+  // Expresión regular que acepta solo letras (mayúsculas y minúsculas), espacios y puntos
+  const nameRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s.]+$/
+  return nameRegex.test(name)
+}
+
 export const validateRow = (row: any, rowIndex: number): ValidationError[] => {
   const errors: ValidationError[] = []
 
@@ -31,7 +38,7 @@ export const validateRow = (row: any, rowIndex: number): ValidationError[] => {
     console.log("✅ Tratamiento válido")
   }
 
-  // 2. Validar Nombres y Apellidos (OBLIGATORIO)
+  // 2. Validar Nombres y Apellidos (OBLIGATORIO con reglas específicas)
   const nombres = getFieldValue(row, "Nombres y Apellidos")
   console.log(`Nombres y Apellidos: "${nombres}"`)
   if (!nombres || nombres.length === 0) {
@@ -48,6 +55,15 @@ export const validateRow = (row: any, rowIndex: number): ValidationError[] => {
       row: rowIndex,
       field: "Nombres y Apellidos",
       message: "El campo no puede exceder 100 caracteres",
+      severity: "error",
+    })
+  } else if (!isValidNameFormat(nombres)) {
+    console.log("❌ ERROR: Nombres y Apellidos contiene caracteres no válidos")
+    errors.push({
+      row: rowIndex,
+      field: "Nombres y Apellidos",
+      message:
+        "El campo solo acepta letras mayúsculas y minúsculas, espacios y puntos. No se permiten caracteres especiales",
       severity: "error",
     })
   } else {
