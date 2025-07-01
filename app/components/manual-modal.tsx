@@ -24,13 +24,19 @@ export default function ManualModal({ isOpen, onClose }: ManualModalProps) {
 
         <div className="space-y-6">
           <div className="bg-blue-50 p-4 rounded-lg">
-            <h3 className="font-semibold text-blue-900 mb-2">📋 Manual de Usuario - Próximamente</h3>
+            <h3 className="font-semibold text-blue-900 mb-2">📋 Manual de Usuario</h3>
             <p className="text-blue-800 text-sm">
-              El manual detallado de usuario será agregado aquí una vez que sea proporcionado. Incluirá instrucciones
-              paso a paso, ejemplos y mejores prácticas.
+              Puede descargar o visualizar el manual de usuario haciendo clic&nbsp;
+              <a
+                href="/manual.pdf"
+                className="text-blue-700 underline hover:text-blue-900"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                aquí
+              </a>.
             </p>
           </div>
-
           <div>
             <h3 className="font-semibold mb-3">Instrucciones Básicas:</h3>
             <ol className="list-decimal list-inside space-y-2 text-sm text-gray-700">

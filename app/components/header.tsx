@@ -26,10 +26,15 @@ export default function Header({ onDownloadTemplate, onShowManual }: HeaderProps
               <BookOpen className="h-4 w-4" />
               Manual de Usuario
             </Button>
-            <Button onClick={onDownloadTemplate} className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700">
-              <Download className="h-4 w-4" />
-              Descargar Plantilla
-            </Button>
+            <a
+              href="/PlantillaCargueContactosPersonalizados.xlsx"
+              download
+            >
+              <Button className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700">
+                <Download className="h-4 w-4" />
+                Descargar Plantilla
+              </Button>
+            </a>
           </div>
         </div>
       </div>

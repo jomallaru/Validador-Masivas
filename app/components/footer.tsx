@@ -18,6 +18,7 @@ export default function Footer() {
               <li>• Nombres y Apellidos</li>
               <li>• Departamento</li>
               <li>• Municipio</li>
+              <li>• Email</li>
             </ul>
           </div>
 
@@ -26,8 +27,7 @@ export default function Footer() {
             <ul className="text-sm text-gray-600 space-y-1">
               <li>• Cargo</li>
               <li>• Entidad</li>
-              <li>• Dirección</li>
-              <li>• Email</li>
+              <li>• Dirección</li>              
               <li>• Teléfono</li>
               <li>• Celular</li>
             </ul>
