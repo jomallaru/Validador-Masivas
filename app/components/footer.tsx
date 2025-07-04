@@ -6,8 +6,7 @@ export default function Footer() {
           <div>
             <h3 className="font-semibold text-gray-900 mb-3">Validador Excel</h3>
             <p className="text-sm text-gray-600">
-              Sistema especializado en la validación de documentos Excel para comunicaciones masivas con datos de
-              Colombia.
+              Herramienta especializada en la validación de documentos Excel para comunicaciones masivas del SGDEA.
             </p>
           </div>
 

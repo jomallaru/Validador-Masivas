@@ -19,6 +19,7 @@ import { normalizeRowData, validateColumns } from "./utils/column-mapper"
 import Header from "./components/header"
 import Footer from "./components/footer"
 import ManualModal from "./components/manual-modal"
+import { UploadCloud } from "lucide-react";
 
 const downloadExcelTemplate = () => {
   alert("Función de descarga de plantilla - próximamente disponible")
@@ -91,7 +92,7 @@ export default function ExcelValidator() {
           console.log("Filas de datos después de filtrar vacías:", dataRows.length)
 
           // Convertir arrays a objetos usando los headers
-          const objectData = dataRows.map((row: any[], index: number) => {
+          const objectData = (dataRows as any[][]).map((row, index) => {
             const obj: any = {}
             headers.forEach((header, colIndex) => {
               if (header && header.toString().trim()) {
@@ -245,15 +246,19 @@ export default function ExcelValidator() {
             <CardDescription>Sube tu archivo Excel para validar los datos según las especificaciones</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
+
             <div className="space-y-2">
               <Label htmlFor="excel-file">Archivo Excel</Label>
-              <Input
-                id="excel-file"
-                type="file"
-                accept=".xlsx,.xls"
-                onChange={handleFileChange}
-                className="cursor-pointer"
-              />
+              <div className="flex items-center gap-2">
+                 <UploadCloud className="w-5 h-5 text-blue-500" />
+                <Input
+                  id="excel-file"
+                  type="file"
+                  accept=".xlsx,.xls"
+                  onChange={handleFileChange}
+                  className="cursor-pointer"
+                />
+              </div>
             </div>
 
             {file && (

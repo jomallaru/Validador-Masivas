@@ -17,7 +17,7 @@ export default function Header({ onDownloadTemplate, onShowManual }: HeaderProps
             <FileSpreadsheet className="h-8 w-8 text-blue-600" />
             <div>
               <h1 className="text-2xl font-bold text-gray-900">Validador de Documentos Excel</h1>
-              <p className="text-sm text-gray-600">Sistema de validación para comunicaciones masivas</p>
+              <p className="text-sm text-gray-600">Herramienta para la validación de listas de distribuccion</p>
             </div>
           </div>
 
