@@ -42,7 +42,7 @@ export default function Footer() {
                 href="https://github.com/jomallaru"
                 className="text-blue-600 hover:underline"
               >
-                Jonathan Llanos
+                Tathan Llanos
               </a>.
             </li>
           </ul>

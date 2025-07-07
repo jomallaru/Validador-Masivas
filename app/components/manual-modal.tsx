@@ -43,9 +43,10 @@ export default function ManualModal({ isOpen, onClose }: ManualModalProps) {
               <li>Descarga la plantilla Excel usando el botón "Descargar Plantilla"</li>
               <li>Completa los datos en el archivo Excel descargado</li>
               <li>
-                Asegúrate de llenar los campos obligatorios: Tratamiento, Nombres y Apellidos, Departamento, Municipio
+                Asegúrate de llenar todos los campos requeridos, de acuerdo a las instrucciones del manual
               </li>
-              <li>Sube el archivo completado usando el botón "Validar Archivo"</li>
+              <li>Sube el archivo con el botón "Elegir Archivo"</li>
+              <li>Dale clic al botón "Validar Archivo"</li>
               <li>Revisa los errores reportados y corrígelos en tu archivo</li>
               <li>Repite el proceso hasta que la validación sea exitosa</li>
             </ol>
