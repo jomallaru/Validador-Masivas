@@ -35,7 +35,7 @@ export default function Footer() {
 
         <div className="border-t border-gray-200 mt-8 pt-6 text-center">
           <ul className="text-sm text-gray-500 list-none">
-            <li>© 2024 Validador de Documentos Excel. Sistema de validación especializado.</li>
+            <li>© 2025 Herramienta para la validación de listas de distribuccion.</li>
             <li>
               Elaborado por{" "}
               <a

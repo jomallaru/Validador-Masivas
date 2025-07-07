@@ -1,29 +1,26 @@
 import type { ValidationError, ValidationResult } from "../types/validation"
 import { getDepartamentos, getMunicipiosByDepartamento } from "../data/colombia-locations"
 
+// === Obtener valor de campo de forma segura ===
 const getFieldValue = (row: any, fieldName: string): string => {
   const value = row[fieldName]
-  if (value === null || value === undefined) {
-    return ""
-  }
-  return value.toString().trim()
+  return value === null || value === undefined ? "" : value.toString().trim()
 }
 
-// Validación de formato para nombres y apellidos
+// === Validar formato de nombres y apellidos ===
 const isValidNameFormat = (name: string): boolean => {
   const nameRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$/
   return nameRegex.test(name)
 }
 
+// === Validar una fila individual ===
 export const validateRow = (row: any, rowIndex: number): ValidationError[] => {
   const errors: ValidationError[] = []
 
   console.log(`\n=== VALIDANDO FILA ${rowIndex} ===`)
-  console.log("Campos disponibles:", Object.keys(row))
 
   // === Validar Tratamiento (OBLIGATORIO) ===
   const tratamiento = getFieldValue(row, "Tratamiento")
-  console.log(`Tratamiento: "${tratamiento}"`)
   if (!tratamiento) {
     console.log("❌ ERROR: Tratamiento vacío")
     errors.push({
@@ -32,24 +29,13 @@ export const validateRow = (row: any, rowIndex: number): ValidationError[] => {
       message: "El campo Tratamiento es obligatorio",
       severity: "error",
     })
-  } else {
-    console.log("✅ Tratamiento válido")
   }
 
-  // === Validar Tipo de Destinatario (OBLIGATORIO para validar otros campos) ===
-  const tipoDestinatario = getFieldValue(row, "Tipo de Destinatario")
-  console.log(`Tipo de Destinatario: "${tipoDestinatario}"`)
-
-
-  // === Validar Dirección y Email (Condicionales) ===
+  // === Validar Dirección y Email (al menos uno OBLIGATORIO) ===
   const direccion = getFieldValue(row, "Dirección")
   const email = getFieldValue(row, "Email")
-
-  console.log(`Dirección: "${direccion}"`)
-  console.log(`Email: "${email}"`)
-
   if (!direccion && !email) {
-    console.log("❌ ERROR: Debe diligenciar al menos Dirección o Email")
+    console.log("❌ ERROR: Debe diligenciar Dirección o Email")
     errors.push({
       row: rowIndex,
       field: "Dirección",
@@ -60,7 +46,7 @@ export const validateRow = (row: any, rowIndex: number): ValidationError[] => {
 
   if (direccion) {
     if (direccion.length > 100) {
-      console.log("❌ ERROR: Dirección excede 100 caracteres")
+      console.log("❌ ERROR: Dirección muy larga")
       errors.push({
         row: rowIndex,
         field: "Dirección",
@@ -75,14 +61,12 @@ export const validateRow = (row: any, rowIndex: number): ValidationError[] => {
         message: "La dirección solo permite letras, números, espacios, puntos, guiones y numeral (#)",
         severity: "error",
       })
-    } else {
-      console.log("✅ Dirección válida")
     }
   }
 
   if (email) {
     if (email.length > 200) {
-      console.log("❌ ERROR: Email excede 200 caracteres")
+      console.log("❌ ERROR: Email muy largo")
       errors.push({
         row: rowIndex,
         field: "Email",
@@ -90,7 +74,6 @@ export const validateRow = (row: any, rowIndex: number): ValidationError[] => {
         severity: "error",
       })
     }
-
     if (email.includes(" ")) {
       console.log("❌ ERROR: Email contiene espacios")
       errors.push({
@@ -104,7 +87,7 @@ export const validateRow = (row: any, rowIndex: number): ValidationError[] => {
     const emails = email.split(",").map(e => e.trim())
     for (const emailAddr of emails) {
       if (emailAddr && !emailAddr.includes("@")) {
-        console.log(`❌ ERROR: Email incorrecto "${emailAddr}"`)
+        console.log(`❌ ERROR: Email inválido "${emailAddr}"`)
         errors.push({
           row: rowIndex,
           field: "Email",
@@ -115,10 +98,10 @@ export const validateRow = (row: any, rowIndex: number): ValidationError[] => {
     }
   }
 
-    // === Validar Nombres y Apellidos ===
+  // === Validar Nombres y Apellidos (OBLIGATORIO) ===
   const nombres = getFieldValue(row, "Nombres y Apellidos")
-  console.log(`Nombres y Apellidos: "${nombres}"`)
   if (!nombres) {
+    console.log("❌ ERROR: Nombres vacíos")
     errors.push({
       row: rowIndex,
       field: "Nombres y Apellidos",
@@ -126,6 +109,7 @@ export const validateRow = (row: any, rowIndex: number): ValidationError[] => {
       severity: "error",
     })
   } else if (nombres.length > 100) {
+    console.log("❌ ERROR: Nombres muy largos")
     errors.push({
       row: rowIndex,
       field: "Nombres y Apellidos",
@@ -133,20 +117,19 @@ export const validateRow = (row: any, rowIndex: number): ValidationError[] => {
       severity: "error",
     })
   } else if (!isValidNameFormat(nombres)) {
+    console.log("❌ ERROR: Formato de nombres inválido")
     errors.push({
       row: rowIndex,
       field: "Nombres y Apellidos",
       message: "El campo solo acepta letras y espacios",
       severity: "error",
     })
-  } else {
-    console.log("✅ Nombres y Apellidos válidos")
   }
 
-  // === Validar Departamento ===
+  // === Validar Departamento (OBLIGATORIO) ===
   const departamento = getFieldValue(row, "Departamento")
-  console.log(`Departamento: "${departamento}"`)
   if (!departamento) {
+    console.log("❌ ERROR: Departamento vacío")
     errors.push({
       row: rowIndex,
       field: "Departamento",
@@ -156,21 +139,20 @@ export const validateRow = (row: any, rowIndex: number): ValidationError[] => {
   } else {
     const departamentosValidos = getDepartamentos()
     if (!departamentosValidos.includes(departamento)) {
+      console.log(`❌ ERROR: Departamento inválido "${departamento}"`)
       errors.push({
         row: rowIndex,
         field: "Departamento",
         message: `El departamento "${departamento}" no existe en la lista oficial`,
         severity: "error",
       })
-    } else {
-      console.log("✅ Departamento válido")
     }
   }
 
-  // === Validar Municipio ===
+  // === Validar Municipio (OBLIGATORIO) ===
   const municipio = getFieldValue(row, "Municipio")
-  console.log(`Municipio: "${municipio}"`)
   if (!municipio) {
+    console.log("❌ ERROR: Municipio vacío")
     errors.push({
       row: rowIndex,
       field: "Municipio",
@@ -178,16 +160,15 @@ export const validateRow = (row: any, rowIndex: number): ValidationError[] => {
       severity: "error",
     })
   } else if (departamento) {
-    const validMunicipios = getMunicipiosByDepartamento(departamento)
-    if (!validMunicipios.includes(municipio)) {
+    const municipiosValidos = getMunicipiosByDepartamento(departamento)
+    if (!municipiosValidos.includes(municipio)) {
+      console.log(`❌ ERROR: Municipio no pertenece al departamento`)
       errors.push({
         row: rowIndex,
         field: "Municipio",
         message: `El municipio "${municipio}" no pertenece al departamento "${departamento}"`,
         severity: "error",
       })
-    } else {
-      console.log("✅ Municipio válido")
     }
   }
 
@@ -197,6 +178,7 @@ export const validateRow = (row: any, rowIndex: number): ValidationError[] => {
     const telefonos = telefono.split(",").map(t => t.trim())
     for (const tel of telefonos) {
       if (tel.length < 6 || tel.length > 10) {
+        console.log(`⚠️ ADVERTENCIA: Teléfono de longitud incorrecta: ${tel}`)
         errors.push({
           row: rowIndex,
           field: "Teléfono",
@@ -213,6 +195,7 @@ export const validateRow = (row: any, rowIndex: number): ValidationError[] => {
     const celulares = celular.split(",").map(c => c.trim())
     for (const cel of celulares) {
       if (cel.length !== 10) {
+        console.log(`⚠️ ADVERTENCIA: Celular de longitud incorrecta: ${cel}`)
         errors.push({
           row: rowIndex,
           field: "Celular",
@@ -223,13 +206,12 @@ export const validateRow = (row: any, rowIndex: number): ValidationError[] => {
     }
   }
 
-  console.log(`Total de errores fila ${rowIndex}: ${errors.length}`)
   return errors
 }
 
+// === Validar todo el archivo Excel ===
 export const validateExcelData = (data: any[]): ValidationResult => {
   console.log("\n🚀 === INICIANDO VALIDACIÓN ===")
-  console.log("Filas a validar:", data.length)
 
   if (!data || data.length === 0) {
     return {
@@ -247,19 +229,49 @@ export const validateExcelData = (data: any[]): ValidationResult => {
 
   const allErrors: ValidationError[] = []
 
+  // === Validar cada fila individual ===
   data.forEach((row, index) => {
-    const rowNumber = index + 2 // Excel: +2 por encabezado
+    const rowNumber = index + 2 // Excel: fila real considerando encabezado
     const rowErrors = validateRow(row, rowNumber)
     allErrors.push(...rowErrors)
+  })
+
+  // === Verificar correos duplicados y mostrar filas exactas ===
+  const emailMap = new Map<string, number[]>()
+
+  data.forEach((row, index) => {
+    const email = getFieldValue(row, "Email").toLowerCase()
+    if (email) {
+      const emails = email.split(",").map(e => e.trim())
+      for (const emailAddr of emails) {
+        if (!emailMap.has(emailAddr)) {
+          emailMap.set(emailAddr, [])
+        }
+        emailMap.get(emailAddr)!.push(index + 2) // +2 por encabezado
+      }
+    }
+  })
+
+  emailMap.forEach((rows, email) => {
+    if (rows.length > 1) {
+      rows.forEach(rowNumber => {
+        const otrasFilas = rows.filter(r => r !== rowNumber)
+        console.log(`⚠️ Duplicado: ${email} en filas ${rows}`)
+        allErrors.push({
+          row: rowNumber,
+          field: "Email",
+          message: `El correo "${email}" está repetido también en las filas: ${otrasFilas.join(", ")}`,
+          severity: "warning",
+        })
+      })
+    }
   })
 
   const errorRows = new Set(allErrors.map(e => e.row))
   const validRows = data.length - errorRows.size
 
-  console.log("\n📊 === RESUMEN VALIDACIÓN ===")
-  console.log(`Total de errores: ${allErrors.length}`)
-  console.log(`Filas con errores: ${errorRows.size}`)
-  console.log(`Filas válidas: ${validRows}`)
+  console.log(`📊 Total de errores: ${allErrors.length}`)
+  console.log(`✅ Filas válidas: ${validRows} / ${data.length}`)
 
   return {
     isValid: allErrors.length === 0,
