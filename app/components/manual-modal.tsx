@@ -2,7 +2,6 @@
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
-import { X } from "lucide-react"
 
 interface ManualModalProps {
   isOpen: boolean
@@ -14,15 +13,11 @@ export default function ManualModal({ isOpen, onClose }: ManualModalProps) {
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="flex items-center justify-between">
-            Manual de Usuario
-            <Button variant="ghost" size="sm" onClick={onClose}>
-              <X className="h-4 w-4" />
-            </Button>
-          </DialogTitle>
+          <DialogTitle>Manual de Usuario</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-6">
+          {/* Sección de descarga */}
           <div className="bg-blue-50 p-4 rounded-lg">
             <h3 className="font-semibold text-blue-900 mb-2">📋 Manual de Usuario</h3>
             <p className="text-blue-800 text-sm">
@@ -37,18 +32,20 @@ export default function ManualModal({ isOpen, onClose }: ManualModalProps) {
               </a>.
             </p>
           </div>
+
+          {/* Instrucciones básicas */}
           <div>
             <h3 className="font-semibold mb-3">Instrucciones Básicas:</h3>
             <ol className="list-decimal list-inside space-y-2 text-sm text-gray-700">
-              <li>Descarga la plantilla Excel usando el botón "Descargar Plantilla"</li>
-              <li>Completa los datos en el archivo Excel descargado</li>
+              <li>Descargue la plantilla Excel usando el botón "Descargar Plantilla".</li>
+              <li>Complete los datos en el archivo Excel descargado.</li>
               <li>
-                Asegúrate de llenar todos los campos requeridos, de acuerdo a las instrucciones del manual
+                Asegúrese de llenar todos los campos requeridos, de acuerdo a las instrucciones del manual.
               </li>
-              <li>Sube el archivo con el botón "Elegir Archivo"</li>
-              <li>Dale clic al botón "Validar Archivo"</li>
-              <li>Revisa los errores reportados y corrígelos en tu archivo</li>
-              <li>Repite el proceso hasta que la validación sea exitosa</li>
+              <li>Suba el archivo con el botón "Elegir Archivo".</li>
+              <li>Haga clic en el botón "Validar Archivo" cuando esté disponible.</li>
+              <li>Revise los errores reportados y corríjalos en su archivo.</li>
+              <li>Repita el proceso hasta que la validación sea exitosa.</li>
             </ol>
           </div>
         </div>

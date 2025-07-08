@@ -22,7 +22,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="font-semibold text-gray-900 mb-3">Campos Opcionales</h3>
+            <h3 className="font-semibold text-gray-900 mb-3"></h3>
             <ul className="text-sm text-gray-600 space-y-1">
               <li>• Cargo</li>
               <li>• Entidad</li>
