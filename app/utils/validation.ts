@@ -20,6 +20,13 @@ const isValidEntidadFormat = (entidad: string): boolean => {
   return entidadRegex.test(entidad)
 }
 
+// === Validar formato de cargo ===
+const isValidCargoFormat = (cargo: string): boolean => {
+  // Solo acepta letras, espacios y puntos
+  const cargoRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s.]+$/
+  return cargoRegex.test(cargo)
+}
+
 // === Validar una fila individual ===
 export const validateRow = (row: any, rowIndex: number): ValidationError[] => {
   const errors: ValidationError[] = []
@@ -55,6 +62,28 @@ export const validateRow = (row: any, rowIndex: number): ValidationError[] => {
         row: rowIndex,
         field: "Entidad",
         message: "El campo Entidad solo acepta letras, números, espacios, punto (.) y ampersand (&)",
+        severity: "error",
+      })
+    }
+  }
+
+  // === Validar Cargo (CONDICIONAL) ===
+  const cargo = getFieldValue(row, "Cargo")
+  if (cargo) {
+    if (cargo.length > 100) {
+      console.log("❌ ERROR: Cargo muy largo")
+      errors.push({
+        row: rowIndex,
+        field: "Cargo",
+        message: "El campo Cargo no puede exceder 100 caracteres",
+        severity: "error",
+      })
+    } else if (!isValidCargoFormat(cargo)) {
+      console.log("❌ ERROR: Cargo contiene caracteres no permitidos")
+      errors.push({
+        row: rowIndex,
+        field: "Cargo",
+        message: "El campo Cargo solo acepta letras, espacios y puntos",
         severity: "error",
       })
     }
