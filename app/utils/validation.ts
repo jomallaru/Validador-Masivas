@@ -13,57 +13,18 @@ const isValidNameFormat = (name: string): boolean => {
   return nameRegex.test(name)
 }
 
+// === Validar formato de entidad ===
+const isValidEntidadFormat = (entidad: string): boolean => {
+  // Solo acepta letras, números, espacios, punto (.) y ampersand (&)
+  const entidadRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ0-9\s.&]+$/
+  return entidadRegex.test(entidad)
+}
+
 // === Validar una fila individual ===
 export const validateRow = (row: any, rowIndex: number): ValidationError[] => {
   const errors: ValidationError[] = []
 
   console.log(`\n=== VALIDANDO FILA ${rowIndex} ===`)
-  
-  // === Validar Entidad (Condicional) ===
-  const tipoPersona = getFieldValue(row, "Tipo de Persona")
-  const entidad = getFieldValue(row, "Entidad")
-
-  if (tipoPersona === "Jurídica") {
-    if (!entidad) {
-      console.log("❌ ERROR: Entidad vacía para persona jurídica")
-      errors.push({
-        row: rowIndex,
-        field: "Entidad",
-        message: "Para personas jurídicas debe diligenciar el nombre de la entidad o empresa",
-        severity: "error",
-      })
-    } else {
-      if (entidad.length > 100) {
-        console.log("❌ ERROR: Entidad muy larga")
-        errors.push({
-          row: rowIndex,
-          field: "Entidad",
-          message: "La entidad no puede exceder 100 caracteres",
-          severity: "error",
-        })
-      }
-      const entidadRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ0-9\s.&]+$/
-      if (!entidadRegex.test(entidad)) {
-        console.log("❌ ERROR: Entidad contiene caracteres no permitidos")
-        errors.push({
-          row: rowIndex,
-          field: "Entidad",
-          message: "El campo Entidad solo permite letras, números, espacios, punto (.) y ampersand (&)",
-          severity: "error",
-        })
-      }
-    }
-  } else if (tipoPersona === "Natural") {
-    if (entidad.trim().toUpperCase() !== "PARTICULAR") {
-      console.log("❌ ERROR: Entidad debe ser 'PARTICULAR' para persona natural")
-      errors.push({
-        row: rowIndex,
-        field: "Entidad",
-        message: "Para personas naturales debe escribir 'PARTICULAR' en el campo Entidad",
-        severity: "error",
-      })
-    }
-  }
 
   // === Validar Tratamiento (OBLIGATORIO) ===
   const tratamiento = getFieldValue(row, "Tratamiento")
@@ -75,6 +36,28 @@ export const validateRow = (row: any, rowIndex: number): ValidationError[] => {
       message: "El campo Tratamiento es obligatorio",
       severity: "error",
     })
+  }
+
+  // === Validar Entidad (CONDICIONAL) ===
+  const entidad = getFieldValue(row, "Entidad")
+  if (entidad) {
+    if (entidad.length > 100) {
+      console.log("❌ ERROR: Entidad muy larga")
+      errors.push({
+        row: rowIndex,
+        field: "Entidad",
+        message: "El campo Entidad no puede exceder 100 caracteres",
+        severity: "error",
+      })
+    } else if (!isValidEntidadFormat(entidad)) {
+      console.log("❌ ERROR: Entidad contiene caracteres no permitidos")
+      errors.push({
+        row: rowIndex,
+        field: "Entidad",
+        message: "El campo Entidad solo acepta letras, números, espacios, punto (.) y ampersand (&)",
+        severity: "error",
+      })
+    }
   }
 
   // === Validar Dirección y Email (al menos uno OBLIGATORIO) ===
