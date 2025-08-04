@@ -23,7 +23,7 @@ export default function ManualModal({ isOpen, onClose }: ManualModalProps) {
             <p className="text-blue-800 text-sm">
               Puede visualizar el manual de usuario haciendo clic&nbsp;
               <a
-                href="/manual.html"
+                href="/manual.mp4"
                 className="text-blue-700 underline hover:text-blue-900"
                 target="_blank"
                 rel="noopener noreferrer"
