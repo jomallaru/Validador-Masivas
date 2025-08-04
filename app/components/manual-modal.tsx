@@ -21,9 +21,9 @@ export default function ManualModal({ isOpen, onClose }: ManualModalProps) {
           <div className="bg-blue-50 p-4 rounded-lg">
             <h3 className="font-semibold text-blue-900 mb-2">📋 Manual de Usuario</h3>
             <p className="text-blue-800 text-sm">
-              Puede descargar o visualizar el manual de usuario haciendo clic&nbsp;
+              Puede visualizar el manual de usuario haciendo clic&nbsp;
               <a
-                href="/manual.mp4"
+                href="/manual.html"
                 className="text-blue-700 underline hover:text-blue-900"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -40,7 +40,7 @@ export default function ManualModal({ isOpen, onClose }: ManualModalProps) {
               <li>Descargue la plantilla Excel usando el botón "Descargar Plantilla".</li>
               <li>Complete los datos en el archivo Excel descargado.</li>
               <li>
-                Asegúrese de llenar todos los campos requeridos, de acuerdo a las instrucciones del manual.
+                Asegúrese de llenar todos los campos requeridos, de acuerdo a las instrucciones del archivo descargado.
               </li>
               <li>Suba el archivo con el botón "Elegir Archivo".</li>
               <li>Haga clic en el botón "Validar Archivo" cuando esté disponible.</li>
