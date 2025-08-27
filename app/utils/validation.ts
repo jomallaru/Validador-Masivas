@@ -16,14 +16,14 @@ const isValidNameFormat = (name: string): boolean => {
 // === Validar formato de entidad ===
 const isValidEntidadFormat = (entidad: string): boolean => {
   // Solo acepta letras, números, espacios, punto (.) y ampersand (&)
-  const entidadRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ0-9\s.&]+$/
+  const entidadRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ0-9\s.&()]+$/
   return entidadRegex.test(entidad)
 }
 
 // === Validar formato de cargo ===
 const isValidCargoFormat = (cargo: string): boolean => {
   // Solo acepta letras, espacios y puntos
-  const cargoRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s.]+$/
+  const cargoRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s().]+$/
   return cargoRegex.test(cargo)
 }
 
