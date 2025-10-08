@@ -1,5 +1,7 @@
 import type { ValidationError, ValidationResult } from "../types/validation"
 import { getDepartamentos, getMunicipiosByDepartamento } from "../data/colombia-locations"
+import { TRATAMIENTOS_SET, TRATAMIENTOS_PERMITIDOS, normalizeTratamiento } from "../data/tratamientos"
+
 
 // === Obtener valor de campo de forma segura ===
 const getFieldValue = (row: any, fieldName: string): string => {
@@ -33,17 +35,26 @@ export const validateRow = (row: any, rowIndex: number): ValidationError[] => {
 
   console.log(`\n=== VALIDANDO FILA ${rowIndex} ===`)
 
-  // === Validar Tratamiento (OBLIGATORIO) ===
-  const tratamiento = getFieldValue(row, "Tratamiento")
-  if (!tratamiento) {
-    console.log("❌ ERROR: Tratamiento vacío")
+ // === Validar Tratamiento (OBLIGATORIO y en lista) ===
+const tratamiento = getFieldValue(row, "Tratamiento")
+if (!tratamiento) {
+  errors.push({
+    row: rowIndex,
+    field: "Tratamiento",
+    message: "El campo Tratamiento es obligatorio",
+    severity: "error",
+  })
+} else {
+  const tNorm = normalizeTratamiento(tratamiento)
+  if (!TRATAMIENTOS_SET.has(tNorm)) {
     errors.push({
       row: rowIndex,
       field: "Tratamiento",
-      message: "El campo Tratamiento es obligatorio",
+      message: `El valor "${tratamiento}" no es válido. Valores permitidos: ${TRATAMIENTOS_PERMITIDOS.join(", ")}`,
       severity: "error",
     })
   }
+}
 
   // === Validar Entidad (CONDICIONAL) ===
   const entidad = getFieldValue(row, "Entidad")

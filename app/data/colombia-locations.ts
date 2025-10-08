@@ -1118,6 +1118,10 @@ export const COLOMBIA_LOCATIONS = [
   { departamento: "Vichada", municipio: "La Primavera" },
   { departamento: "Vichada", municipio: "Santa Rosalía" },
   { departamento: "Vichada", municipio: "Cumaribo" },
+  { departamento: "Sucre", municipio: "Ovejas" },
+  { departamento: "Caquetá", municipio: "San Vicente Del Caguán" },
+
+
 ]
 
 export const getDepartamentos = () => {
