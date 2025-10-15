@@ -35,26 +35,26 @@ export const validateRow = (row: any, rowIndex: number): ValidationError[] => {
 
   console.log(`\n=== VALIDANDO FILA ${rowIndex} ===`)
 
- // === Validar Tratamiento (OBLIGATORIO y en lista) ===
-const tratamiento = getFieldValue(row, "Tratamiento")
-if (!tratamiento) {
-  errors.push({
-    row: rowIndex,
-    field: "Tratamiento",
-    message: "El campo Tratamiento es obligatorio",
-    severity: "error",
-  })
-} else {
-  const tNorm = normalizeTratamiento(tratamiento)
-  if (!TRATAMIENTOS_SET.has(tNorm)) {
+  // === Validar Tratamiento (OBLIGATORIO y en lista) ===
+  const tratamiento = getFieldValue(row, "Tratamiento")
+  if (!tratamiento) {
     errors.push({
       row: rowIndex,
       field: "Tratamiento",
-      message: `El valor "${tratamiento}" no es válido. Valores permitidos: ${TRATAMIENTOS_PERMITIDOS.join(", ")}`,
+      message: "El campo Tratamiento es obligatorio",
       severity: "error",
     })
+  } else {
+    const tNorm = normalizeTratamiento(tratamiento)
+    if (!TRATAMIENTOS_SET.has(tNorm)) {
+      errors.push({
+        row: rowIndex,
+        field: "Tratamiento",
+        message: `El valor "${tratamiento}" no es válido. Valores permitidos: ${TRATAMIENTOS_PERMITIDOS.join(", ")}`,
+        severity: "error",
+      })
+    }
   }
-}
 
   // === Validar Entidad (CONDICIONAL) ===
   const entidad = getFieldValue(row, "Entidad")
@@ -100,109 +100,111 @@ if (!tratamiento) {
     }
   }
 
-// === Validar Dirección y Email (al menos uno OBLIGATORIO) ===
-const direccion = getFieldValue(row, "Dirección")
-const email = getFieldValue(row, "Email")
+  // === Validar Dirección y Email (al menos uno OBLIGATORIO) ===
+  const direccion = getFieldValue(row, "Dirección")
+  const email = getFieldValue(row, "Email")
 
-if (!direccion && !email) {
+  if (!direccion && !email) {
     console.log("❌ ERROR: Debe diligenciar Dirección o Email")
     errors.push({
+      row: rowIndex,
+      field: "Dirección",
+      message: "Debe diligenciar una dirección física o un correo electrónico",
+      severity: "error",
+    })
+  }
+
+  // Validar Dirección
+  if (direccion) {
+    if (direccion.length > 100) {
+      console.log("❌ ERROR: Dirección muy larga")
+      errors.push({
         row: rowIndex,
         field: "Dirección",
-        message: "Debe diligenciar una dirección física o un correo electrónico",
+        message: "La dirección no puede exceder 100 caracteres",
         severity: "error",
-    })
-}
-
-// Validar Dirección
-if (direccion) {
-    if (direccion.length > 100) {
-        console.log("❌ ERROR: Dirección muy larga")
-        errors.push({
-            row: rowIndex,
-            field: "Dirección",
-            message: "La dirección no puede exceder 100 caracteres",
-            severity: "error",
-        })
+      })
     } else if (!/^[a-zA-ZáéíóúÁÉÍÓÚüÜ0-9\s.#\-,º""–°]+$/.test(direccion)) {
-        console.log("❌ ERROR: Dirección contiene caracteres no permitidos")
-        errors.push({
-            row: rowIndex,
-            field: "Dirección",
-            message: "La dirección solo permite letras, números, espacios, puntos, guiones y numeral (#)",
-            severity: "error",
-        })
+      console.log("❌ ERROR: Dirección contiene caracteres no permitidos")
+      errors.push({
+        row: rowIndex,
+        field: "Dirección",
+        message: "La dirección solo permite letras, números, espacios, puntos, guiones y numeral (#)",
+        severity: "error",
+      })
     }
-}
+  }
 
-// Validar Email
-if (email) {
+  // Validar Email
+  if (email) {
     let emailErrors = []
-    
+
     // Verificar longitud máxima
     if (email.length > 200) {
-        console.log("❌ ERROR: Email muy largo")
-        emailErrors.push("no puede exceder 200 caracteres")
+      console.log("❌ ERROR: Email muy largo")
+      emailErrors.push("no puede exceder 200 caracteres")
     }
 
     // Verificar que no tenga espacios
     if (email.includes(" ")) {
-        console.log("❌ ERROR: Email contiene espacios")
-        emailErrors.push("no se permiten espacios (separe múltiples correos con comas sin espacios)")
+      console.log("❌ ERROR: Email contiene espacios")
+      emailErrors.push("no se permiten espacios (separe múltiples correos con comas sin espacios)")
+    }
+
+    // Verificar si termina con coma
+    if (email.trim().endsWith(",")) {
+      console.log("❌ ERROR: Email termina con coma")
+      emailErrors.push("no puede terminar con coma (,) — revise si hay un correo vacío al final")
     }
 
     // Separar múltiples emails y validar cada uno
     const emails = email.split(",").map(e => e.trim())
-    
+
     for (const emailAddr of emails) {
-        if (emailAddr) { // Solo validar si no está vacío
-            // Verificar que contenga la letra ñ (no permitida)
-            if (/[ñÑ]/.test(emailAddr)) {
-                console.log(`❌ ERROR: Email contiene letra ñ: "${emailAddr}"`)
-                emailErrors.push(`"${emailAddr}" no puede contener la letra ñ`)
-            }
-            
-            // Validación básica de formato de email
-            const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-            if (!emailRegex.test(emailAddr)) {
-                console.log(`❌ ERROR: Email inválido "${emailAddr}"`)
-                emailErrors.push(`formato incorrecto en "${emailAddr}"`)
-            }
-            
-            // Verificar caracteres permitidos específicos para emails
-            if (!/^[a-zA-Z0-9._@-]+$/.test(emailAddr)) {
-                console.log(`❌ ERROR: Email contiene caracteres no permitidos: "${emailAddr}"`)
-                emailErrors.push(`"${emailAddr}" contiene caracteres no permitidos`)
-            }
-            
-            // Validaciones adicionales más específicas
-            if (emailAddr.startsWith('.') || emailAddr.endsWith('.')) {
-                console.log(`❌ ERROR: Email no puede empezar o terminar con punto: "${emailAddr}"`)
-                emailErrors.push(`"${emailAddr}" no puede empezar o terminar con punto`)
-            }
-            
-            if (emailAddr.includes('..')) {
-                console.log(`❌ ERROR: Email no puede tener puntos consecutivos: "${emailAddr}"`)
-                emailErrors.push(`"${emailAddr}" no puede tener puntos consecutivos`)
-            }
-            
-            if (emailAddr.split('@').length !== 2) {
-                console.log(`❌ ERROR: Email debe tener exactamente un @: "${emailAddr}"`)
-                emailErrors.push(`"${emailAddr}" debe tener exactamente un símbolo @`)
-            }
+      if (emailAddr) { // Solo validar si no está vacío
+        if (/[ñÑ]/.test(emailAddr)) {
+          console.log(`❌ ERROR: Email contiene letra ñ: "${emailAddr}"`)
+          emailErrors.push(`"${emailAddr}" no puede contener la letra ñ`)
         }
+
+        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+        if (!emailRegex.test(emailAddr)) {
+          console.log(`❌ ERROR: Email inválido "${emailAddr}"`)
+          emailErrors.push(`formato incorrecto en "${emailAddr}"`)
+        }
+
+        if (!/^[a-zA-Z0-9._@-]+$/.test(emailAddr)) {
+          console.log(`❌ ERROR: Email contiene caracteres no permitidos: "${emailAddr}"`)
+          emailErrors.push(`"${emailAddr}" contiene caracteres no permitidos`)
+        }
+
+        if (emailAddr.startsWith('.') || emailAddr.endsWith('.')) {
+          console.log(`❌ ERROR: Email no puede empezar o terminar con punto: "${emailAddr}"`)
+          emailErrors.push(`"${emailAddr}" no puede empezar o terminar con punto`)
+        }
+
+        if (emailAddr.includes('..')) {
+          console.log(`❌ ERROR: Email no puede tener puntos consecutivos: "${emailAddr}"`)
+          emailErrors.push(`"${emailAddr}" no puede tener puntos consecutivos`)
+        }
+
+        if (emailAddr.split('@').length !== 2) {
+          console.log(`❌ ERROR: Email debe tener exactamente un @: "${emailAddr}"`)
+          emailErrors.push(`"${emailAddr}" debe tener exactamente un símbolo @`)
+        }
+      }
     }
-    
-    // Si hay errores de email, agregar un solo error con todos los problemas
+
     if (emailErrors.length > 0) {
-        errors.push({
-            row: rowIndex,
-            field: "Email",
-            message: `Errores en email: ${emailErrors.join(', ')}`,
-            severity: "error",
-        })
+      errors.push({
+        row: rowIndex,
+        field: "Email",
+        message: `Errores en email: ${emailErrors.join(', ')}`,
+        severity: "error",
+      })
     }
-}
+  }
+
 
   // === Validar Nombres y Apellidos (OBLIGATORIO) ===
   const nombres = getFieldValue(row, "Nombres y Apellidos")
