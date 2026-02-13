@@ -11,14 +11,14 @@ const getFieldValue = (row: any, fieldName: string): string => {
 
 // === Validar formato de nombres y apellidos ===
 const isValidNameFormat = (name: string): boolean => {
-  const nameRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]+$/
+  const nameRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\sù]+$/
   return nameRegex.test(name)
 }
 
 // === Validar formato de entidad ===
 const isValidEntidadFormat = (entidad: string): boolean => {
   // Solo acepta letras, números, espacios, punto (.) y ampersand (&)
-  const entidadRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ0-9\s.&()]+$/
+  const entidadRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ0-9\s.&(),-–"]+$/
   return entidadRegex.test(entidad)
 }
 
@@ -124,7 +124,7 @@ export const validateRow = (row: any, rowIndex: number): ValidationError[] => {
         message: "La dirección no puede exceder 100 caracteres",
         severity: "error",
       })
-    } else if (!/^[a-zA-ZáéíóúÁÉÍÓÚüÜ0-9\s.#\-,º""–°]+$/.test(direccion)) {
+    } else if (!/^[a-zA-ZáéíóúÁÉÍÓÚüÜ0-9\s.#\-,º""–°:()·/ªñ•;]+$/.test(direccion)) {
       console.log("❌ ERROR: Dirección contiene caracteres no permitidos")
       errors.push({
         row: rowIndex,
