@@ -73,6 +73,12 @@ export const TRATAMIENTOS_PERMITIDOS = [
   "Señora",
   "Señores",
   "Señorita",
+  "Rector",
+  "Rectora",
+  "Docente",
+  "Maestro",
+  "Maestra",
+  "Estudiante",
 ];
 
 // Normalizador de texto: quita espacios extras y convierte a minúsculas
