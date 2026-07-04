@@ -19,6 +19,7 @@ import { normalizeRowData, validateColumns } from "./utils/column-mapper"
 import Header from "./components/header"
 import Footer from "./components/footer"
 import ManualModal from "./components/manual-modal"
+import SemaforoModal from "./components/semaforo-modal"
 
 const downloadExcelTemplate = () => {
   alert("Función de descarga de plantilla - próximamente disponible")
@@ -36,6 +37,7 @@ export default function ExcelValidator() {
     foundColumns: string[]
   } | null>(null)
   const [showManual, setShowManual] = useState(false)
+  const [showSemaforo, setShowSemaforo] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -265,7 +267,11 @@ export default function ExcelValidator() {
   return (
     <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950/20 text-slate-800 dark:text-slate-100 flex flex-col justify-between">
       <div className="w-full">
-        <Header onDownloadTemplate={downloadExcelTemplate} onShowManual={() => setShowManual(true)} />
+        <Header
+          onDownloadTemplate={downloadExcelTemplate}
+          onShowManual={() => setShowManual(true)}
+          onShowSemaforo={() => setShowSemaforo(true)}
+        />
 
         <main className="max-w-6xl mx-auto p-4 md:p-6 space-y-6">
           <Card className="border-slate-200/80 shadow-md dark:border-slate-800/80 overflow-hidden">
@@ -624,6 +630,7 @@ export default function ExcelValidator() {
       <Footer />
 
       <ManualModal isOpen={showManual} onClose={() => setShowManual(false)} />
+      <SemaforoModal isOpen={showSemaforo} onClose={() => setShowSemaforo(false)} />
     </div>
   )
 }

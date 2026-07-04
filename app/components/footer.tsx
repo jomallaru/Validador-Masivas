@@ -29,6 +29,10 @@ export default function Footer() {
                 <span className="h-1.5 w-1.5 rounded-full bg-indigo-600"></span>
                 Municipio
               </li>
+              <li className="flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-indigo-600"></span>
+                Correo
+              </li>
             </ul>
           </div>
 
@@ -41,7 +45,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-2">
                 <span className="h-1.5 w-1.5 rounded-full bg-slate-400"></span>
-                Dirección u Correo (mín. uno es obligatorio)
+                Dirección
               </li>
               <li className="flex items-center gap-2">
                 <span className="h-1.5 w-1.5 rounded-full bg-slate-400"></span>
@@ -51,20 +55,23 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-slate-200/60 dark:border-slate-800 mt-10 pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="border-t border-slate-300/60 dark:border-slate-800 mt-10 pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-sm text-slate-500 dark:text-slate-400">
             © 2026 Herramienta para la validación de listas de distribución.
           </p>
-          <p className="text-sm text-slate-500 dark:text-slate-400">
-            Elaborado por{" "}
-            <a
-              href="https://github.com/jomallaru"
-              className="text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 font-medium hover:underline transition-colors"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Tathan Llanos
-            </a>.
+          <p className="mt-4 flex items-center justify-center gap-2 text-base tracking-wide text-slate-500 dark:text-slate-400">
+            <span className="text-base">🦎</span>
+            <span>
+              Desarrollado por{" "}
+              <a
+                href="https://github.com/jomallaru"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-bold bg-gradient-to-r from-indigo-500 via-blue-500 to-cyan-600 bg-clip-text text-transparent hover:opacity-80 transition-opacity"
+              >
+                Tathan Llanos
+              </a>
+            </span>
           </p>
         </div>
       </div>
